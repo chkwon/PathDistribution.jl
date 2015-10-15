@@ -7,7 +7,7 @@
 
 [![Build Status](https://travis-ci.org/chkwon/PathDistribution.jl.svg?branch=master)](https://travis-ci.org/chkwon/PathDistribution.jl)
 [![Build status](https://ci.appveyor.com/api/projects/status/ft7mcyofj0g9mxr5?svg=true)](https://ci.appveyor.com/project/chkwon/pathdistribution-jl)
-[![Coverage Status](https://coveralls.io/repos/chkwon/RobustShortestPath.jl/badge.svg)](https://coveralls.io/r/chkwon/PathDistribution.jl)
+[![Coverage Status](https://coveralls.io/repos/chkwon/PathDistribution.jl/badge.svg?branch=master&service=github)](https://coveralls.io/github/chkwon/PathDistribution.jl?branch=master)
 
 
 This Julia package implements the Monte Carlo path generation method to estimat the number of simple paths between a pair of nodes in a graph, proposed by [Roberts and Kroese (2007)](http://dx.doi.org/10.7155/jgaa.00142): Estimating the Number of *s*-*t* Paths in a Graph. *Journal of Graph Algorithms and Applications*, 11(1), 195-214.
