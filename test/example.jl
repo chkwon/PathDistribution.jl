@@ -19,7 +19,7 @@ println("beta2 = $(beta_est[2])")
 println("beta3 = $(beta_est[3])")
 
 
----------------
+# ---------------
 
 # Another example in README.md
 

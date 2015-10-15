@@ -1,0 +1,66 @@
+using Gadfly, LsqFit
+
+include("misc.jl")
+include("monte_carlo_path_generation.jl")
+include("path_distribution_estimate.jl")
+
+
+
+filename = "Buffalo-Data"
+data = readcsv("$(filename).csv", header=true) # 405,094
+origin = 1
+destination = 84
+beta_fit = [401103.602284; 61.890097; 9.811411]
+
+filename = "Albany-Data"
+data = readcsv("$(filename).csv", header=true) #3,551
+origin = 1
+destination = 12
+beta_fit = [3504.287463; 71.552699; 6.485460]
+
+# filename = "Sioux-Falls"
+# data = readcsv("$(filename).csv", header=true) #3,705
+# origin = 3
+# destination = 19
+# beta_fit = [3627.177263; 220.070292; 5.327236]
+
+
+start_node = round(Int64, data[1][:,1])
+end_node = round(Int64, data[1][:,2])
+link_length = data[1][:,3]
+
+#
+# start_node_un = round(Int64, data[1][:,1])
+# end_node_un = round(Int64, data[1][:,2])
+# link_length_un = data[1][:,3]
+# start_node = [start_node_un; end_node_un]
+# end_node = [end_node_un; start_node_un]
+# link_length = [link_length_un; link_length_un]
+
+
+
+
+number_paths, path_length_samples =
+    monte_carlo_path_generation(origin, destination, start_node, end_node, link_length)
+
+println("number of paths estimate: $number_paths")
+
+beta_est = path_distribution_fitting(number_paths, path_length_samples)
+
+println("beta_fit = $beta_fit")
+println("beta_est = $beta_est")
+
+x_fit = 0.3*beta_fit[2] : 1 : 2*beta_fit[2]
+y_fit = cumulative_model(x_fit, beta_fit)
+y_est = cumulative_model(x_fit, beta_est)
+
+
+fit_plot =
+    plot(
+        layer(x=x_fit, y=y_fit, Geom.line, Theme(default_color=colorant"red") ) ,
+        layer(x=x_fit, y=y_est, Geom.line, Theme(default_color=colorant"blue") ) ,
+        Guide.xlabel("Path Length"), Guide.ylabel("Cumulative Count"),
+        # Guide.title(title),
+    )
+
+draw(PDF("$(filename).pdf", 10inch, 6inch), fit_plot)
