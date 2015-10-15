@@ -86,3 +86,18 @@ adj_mtx = [ 0 0 0 1 0 0 0 0 0 0 0 1 0 0 1 1 1 0 1 1 0 0 0 0;
 number_paths = monte_carlo_path_generation(1, size(adj_mtx,1), adj_mtx)
 println("Case 5: $number_paths (true value = 1,892,724)")
 # @assert abs(number_paths - 4959864)/4959864 < 0.05
+
+
+
+
+
+
+
+
+
+# An example.
+
+include("example.jl")
+
+
+# end
