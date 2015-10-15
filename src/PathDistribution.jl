@@ -11,7 +11,8 @@ include("path_distribution_estimate.jl")
 export
 	PathSample,
 	monte_carlo_path_generation,
-	path_distribution_fitting
+	path_distribution_fitting,
+	cumulative_model
 
 
 

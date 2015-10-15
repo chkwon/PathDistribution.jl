@@ -74,7 +74,7 @@ function estimate_path_number(samples, N)
 end
 
 
-function length_distribution(naive_samples::Array{PathSample}, adj::Array{Int64,2}, no_node::Int64, destination::Int64)
+function length_distribution(naive_samples::Array{PathSample}, adj::Array{Int,2}, no_node::Int, destination::Int)
     # Length-Distribution
     # l_hat = numerator / denominator
 
