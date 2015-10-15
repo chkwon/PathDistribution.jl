@@ -12,6 +12,16 @@ end
 cumulative_model(x, beta) =  beta[1] * (1  -  exp( - (x/beta[2]).^beta[3] ) )
 
 
+function path_distribution_fitting(origin, destination, start_node, end_node, link_length)
+    number_paths, path_length_samples =
+        monte_carlo_path_generation(origin, destination, start_node, end_node, link_length)
+
+    beta_est = path_distribution_fitting(number_paths, path_length_samples)
+
+    return beta_est
+end
+
+
 function path_distribution_fitting(number_paths, path_lengths)
 
     beta_guess = [length(path_lengths), median(path_lengths), 10.0]

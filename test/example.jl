@@ -9,13 +9,7 @@ start_node = round(Int64, data[1][:,1])
 end_node = round(Int64, data[1][:,2])
 link_length = data[1][:,3]
 
-
-number_paths, path_length_samples =
-    monte_carlo_path_generation(origin, destination, start_node, end_node, link_length)
-
-println("number of paths estimate: $number_paths")
-
-beta_est = path_distribution_fitting(number_paths, path_length_samples)
+beta_est = path_distribution_fitting(origin, destination, start_node, end_node, link_length
 
 # println("beta_est = $beta_est")
 
