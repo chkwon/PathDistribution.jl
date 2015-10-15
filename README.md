@@ -6,9 +6,11 @@ This package implements the Monte Carlo path generation method to estimat the nu
 
 In addition, using the same idea, this package tries to estimate the path length distribution as follows. Let *n(x)* denote the cumulative number of paths whose length is no greather than *x*. We assume that *n(x)* is of the form:
 
-n(x) = beta1 ( 1 - exp( - (x/beta2)^beta3 ) )
+```julia
+n(x) = beta[1] * ( 1 - exp( - (x/beta[2])^beta[3] ) )
+```
 
-This package estimates beta1, beta2, and beta3.
+This package estimates ```beta```.
 
 ## Installation
 
