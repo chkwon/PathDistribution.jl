@@ -9,7 +9,17 @@ start_node = round(Int64, data[1][:,1])
 end_node = round(Int64, data[1][:,2])
 link_length = data[1][:,3]
 
+
 beta_est = path_distribution_fitting(origin, destination, start_node, end_node, link_length)
+println(" cumulative_count(path_length) = beta1 ( 1 - exp ( - (path_length/beta2)^beta3 ) ) ")
+println("beta1 = $(beta_est[1])")
+println("beta2 = $(beta_est[2])")
+println("beta3 = $(beta_est[3])")
+
+
+N1 = 1000
+N2 = 2000
+beta_est = path_distribution_fitting(origin, destination, start_node, end_node, link_length, N1, N2)
 
 # println("beta_est = $beta_est")
 

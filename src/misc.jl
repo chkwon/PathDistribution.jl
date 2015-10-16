@@ -22,7 +22,7 @@ function getPathLength(path, link_length_dict)
 
         return path_length
     end
-    
+
 end
 
 function getNoNode(start_node, end_node)

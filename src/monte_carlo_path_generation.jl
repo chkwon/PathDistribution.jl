@@ -5,6 +5,33 @@ type PathSample
 end
 
 
+
+function monte_carlo_path_generation(origin::Int, destination::Int, adj_mtx::Array{Int,2}, N1=5000, N2=10000)
+    samples = length_distribution_path_generation(origin, destination, adj_mtx, [], N1, N2)
+    number_paths, path_length_samples = sample_path_dist(samples, N2)
+    return number_paths
+end
+
+
+function monte_carlo_path_generation(origin::Int, destination::Int, start_node::Array{Int,1}, end_node::Array{Int,1}, link_length, N1=5000, N2=10000)
+    # I find that the method is very sensitive to these two numbers of samples to be generated.
+    # It maybe the problem of my coding, or just the algorithm.
+    # See: Roberts, B., & Kroese, D. P. (2007). Estimating the Number of st Paths in a Graph. J. Graph Algorithms Appl., 11(1), 195-214.
+    # http://dx.doi.org/10.7155/jgaa.00142
+
+    link_length_dict = getLinkLengthDict(start_node, end_node, link_length)
+    adj_mtx = getAdjacency(start_node, end_node)
+
+    samples = length_distribution_path_generation(origin, destination, adj_mtx, link_length_dict, N1, N2)
+    number_paths, path_length_samples = sample_path_dist(samples, N2)
+    return number_paths, path_length_samples
+end
+
+
+
+
+
+
 function naive_path_generation(origin, destination, adj_mtx, N1)
     # Algorithm 1. Naive Path Generation
 
@@ -116,40 +143,6 @@ function sample_path_dist(samples, N)
     return estimate, path_lengths
 end
 
-
-
-function monte_carlo_path_generation(origin, destination, adj_mtx)
-    # I find that the method is very sensitive to these two numbers of samples to be generated.
-    # It maybe the problem of my coding, or just the algorithm.
-    # See: Roberts, B., & Kroese, D. P. (2007). Estimating the Number of st Paths in a Graph. J. Graph Algorithms Appl., 11(1), 195-214.
-    # http://dx.doi.org/10.7155/jgaa.00142
-    N1 = 5000
-    N2 = 10000
-
-    samples = length_distribution_path_generation(origin, destination, adj_mtx, [], N1, N2)
-    number_paths, path_length_samples = sample_path_dist(samples, N2)
-    return number_paths
-end
-
-
-function monte_carlo_path_generation(origin, destination, start_node, end_node, link_length)
-    # I find that the method is very sensitive to these two numbers of samples to be generated.
-    # It maybe the problem of my coding, or just the algorithm.
-    # See: Roberts, B., & Kroese, D. P. (2007). Estimating the Number of st Paths in a Graph. J. Graph Algorithms Appl., 11(1), 195-214.
-    # http://dx.doi.org/10.7155/jgaa.00142
-    N1 = 5000
-    N2 = 10000
-
-    link_length_dict = getLinkLengthDict(start_node, end_node, link_length)
-
-    adj_mtx = getAdjacency(start_node, end_node)
-
-    samples = length_distribution_path_generation(origin, destination, adj_mtx, link_length_dict, N1, N2)
-
-    number_paths, path_length_samples = sample_path_dist(samples, N2)
-
-    return number_paths, path_length_samples
-end
 
 
 

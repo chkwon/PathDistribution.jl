@@ -5,6 +5,9 @@ using PathDistribution
 # http://dx.doi.org/10.7155/jgaa.00142
 
 
+N1 = 1000
+N2 = 2000
+
 adj_mtx =[  0 1 1 1 0 1 1 1;
             1 0 0 0 1 1 1 0;
             1 0 0 1 1 1 1 1 ;
@@ -31,7 +34,7 @@ adj_mtx = [ 0 1 1 1 1 1 1 0 1 1 1 1;
             1 1 1 1 1 1 1 1 1 0 1 0;
             1 1 1 1 1 1 1 1 1 1 0 1;
             1 1 1 1 1 1 1 1 1 1 1 0  ]
-number_paths = monte_carlo_path_generation(1, size(adj_mtx,1), adj_mtx)
+number_paths = monte_carlo_path_generation(1, size(adj_mtx,1), adj_mtx, N1, N2)
 println("Case 2: $number_paths (true value = 4,959,864)")
 # @assert abs(number_paths - 4959864)/4959864 < 0.05
 
@@ -54,7 +57,7 @@ adj_mtx = [ 0 1 1 0 0 1 0 0 1 0 0 0 0 0 0 0;
             0 0 1 0 1 1 1 0 1 0 0 1 0 0 1 0;
             1 0 0 0 0 0 0 0 0 0 0 1 1 0 0 1;
             1 1 0 1 0 0 0 1 0 0 1 0 0 0 0 0 ]
-number_paths = monte_carlo_path_generation(1, size(adj_mtx,1), adj_mtx)
+number_paths = monte_carlo_path_generation(1, size(adj_mtx,1), adj_mtx, N1, N2)
 println("Case 3: $number_paths (true value = 138,481)")
 
 
@@ -83,7 +86,7 @@ adj_mtx = [ 0 0 0 1 0 0 0 0 0 0 0 1 0 0 1 1 1 0 1 1 0 0 0 0;
             0 1 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0;
             0 0 0 0 0 0 0 0 0 0 0 1 1 0 0 1 1 1 0 1 0 0 0 1;
             0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 1 0 ]
-number_paths = monte_carlo_path_generation(1, size(adj_mtx,1), adj_mtx)
+number_paths = monte_carlo_path_generation(1, size(adj_mtx,1), adj_mtx, N1, N2)
 println("Case 5: $number_paths (true value = 1,892,724)")
 # @assert abs(number_paths - 4959864)/4959864 < 0.05
 
@@ -140,7 +143,11 @@ link_length = data[:,3] #third
 origin = 1
 destination = 15
 
+N1 = 1000
+N2 = 2000
+
 beta_est = path_distribution_fitting(origin, destination, start_node, end_node, link_length)
+beta_est = path_distribution_fitting(origin, destination, start_node, end_node, link_length, N1, N2)
 
 
 
