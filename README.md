@@ -120,3 +120,23 @@ no_path_est, x_data, y_data =
 
 beta_est = path_distribution_fitting(x_data, y_data)
 ```
+
+Using [Gadfly.jl](http://gadflyjl.org) for example, one can create a plot as follows:
+```julia
+using Gadfly
+
+x_fit = x_data
+y_fit = cumulative_model(x_fit, beta_est)
+
+fit_plot =
+plot(
+    layer(x=x_fit, y=y_fit, Geom.line, Theme(default_color=colorant"red") ) ,
+    layer(x=x_data, y=y_data, Geom.point, Theme(default_color=colorant"blue") ) ,
+    Guide.xlabel("Path Length"), Guide.ylabel("Cumulative Count"),
+    Guide.title("Estimated Path Length Distribution"),
+)
+
+draw(SVG("fit_plot.svg", 10inch, 6inch), fit_plot)
+```
+
+![Example plot of fit_plot.svg](fit_plot.svg)
