@@ -1,4 +1,12 @@
-using PathDistribution
+# using PathDistribution
+
+
+using LsqFit
+
+include("../src/misc.jl")
+include("../src/monte_carlo.jl")
+include("../src/path_distribution_estimate.jl")
+
 
 # Datasets from
 # Roberts, B., & Kroese, D. P. (2007). Estimating the Number of st Paths in a Graph. J. Graph Algorithms Appl., 11(1), 195-214.
@@ -18,7 +26,7 @@ adj_mtx =[  0 1 1 1 0 1 1 1;
             1 0 1 1 0 1 1 0     ]
 no_path_est, x_data, y_data = monte_carlo_path_distribution(1, size(adj_mtx,1), adj_mtx)
 println("Case 1: $no_path_est (true value = 397)")
-@assert abs(no_path_est - 397)/397 < 0.05
+@assert abs(number_paths - 397)/397 < 0.05
 
 
 
@@ -141,15 +149,12 @@ link_length = data[:,3] #third
 origin = 1
 destination = 15
 
-beta_est = path_distribution_fitting(origin, destination, start_node, end_node, link_length)
-println(beta_est)
-
-
 N1 = 1000
 N2 = 2000
 
+beta_est = path_distribution_fitting(origin, destination, start_node, end_node, link_length)
 beta_est = path_distribution_fitting(origin, destination, start_node, end_node, link_length, N1, N2)
-println(beta_est)
+
 
 
 

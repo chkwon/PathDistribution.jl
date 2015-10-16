@@ -1,3 +1,16 @@
+function getLinkLengthDict(adj_mtx)
+    link_length_dict = Dict()
+    for i=1:size(adj_mtx,1)
+        for j=1:size(adj_mtx,2)
+            if adj_mtx[i,j]==1
+                link_length_dict[i,j] = 1
+            end
+        end
+    end
+
+    return link_length_dict
+end
+
 function getLinkLengthDict(start_node, end_node, link_length)
     link_length_dict = Dict()
     for k=1:length(start_node)

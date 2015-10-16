@@ -5,12 +5,12 @@ module PathDistribution
 using LsqFit
 
 include("misc.jl")
-include("monte_carlo_path_generation.jl")
+include("monte_carlo.jl")
 include("path_distribution_estimate.jl")
 
 export
 	PathSample,
-	monte_carlo_path_generation,
+	monte_carlo_path_distribution,
 	path_distribution_fitting,
 	cumulative_model
 
