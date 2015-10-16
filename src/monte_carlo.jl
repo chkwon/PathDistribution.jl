@@ -27,6 +27,13 @@ function monte_carlo_path_distribution(origin::Int, destination::Int, adj_mtx::A
 
     return monte_carlo_path_distribution(origin, destination, adj_mtx, link_length_dict, N1, N2)
 end
+function monte_carlo_path_number(origin::Int, destination::Int, adj_mtx::Array{Int,2}, N1=5000, N2=10000)
+    link_length_dict = getLinkLengthDict(adj_mtx)
+    no_path_est, x_data, y_data = monte_carlo_path_distribution(origin, destination, adj_mtx, link_length_dict, N1, N2)
+
+    return no_path_est
+end
+
 
 # Useful for experimenting many realistic road networks
 function monte_carlo_path_distribution(origin::Int, destination::Int, start_node::Array{Int,1}, end_node::Array{Int,1}, link_length, N1=5000, N2=10000)

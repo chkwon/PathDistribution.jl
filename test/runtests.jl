@@ -16,6 +16,11 @@ adj_mtx =[  0 1 1 1 0 1 1 1;
             1 1 1 1 1 0 1 1 ;
             1 1 1 1 0 1 0 1 ;
             1 0 1 1 0 1 1 0     ]
+
+no_path_est = monte_carlo_path_number(1, size(adj_mtx,1), adj_mtx)
+println("Case 1: $no_path_est (true value = 397)")
+@assert abs(no_path_est - 397)/397 < 0.05
+
 no_path_est, x_data, y_data = monte_carlo_path_distribution(1, size(adj_mtx,1), adj_mtx)
 println("Case 1: $no_path_est (true value = 397)")
 @assert abs(no_path_est - 397)/397 < 0.05

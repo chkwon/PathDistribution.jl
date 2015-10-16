@@ -46,8 +46,21 @@ and want to estimate the number of paths between node 1 and node 8, then
 
 ```julia
 using PathDistribution
-number_paths = monte_carlo_path_generation(1, 8, adj_mtx)
+number_paths = monte_carlo_path_number(1, 8, adj_mtx)
 ```
+
+or
+
+```julia
+using PathDistribution
+number_paths, x_data, y_data = monte_carlo_path_distribution(1, 8, adj_mtx)
+```
+where `x_data` and `y_data` are for estimating the cumulative count of paths by path length. These data may be used to estimate `beta` in the function form `n(x)` as follows:
+
+```julia
+beta_est = path_distribution_fitting(x_data, y_data)
+```
+
 
 When you have the following form data:
 ```julia
@@ -100,11 +113,10 @@ then use the following function:
 using PathDistribution
 beta_est = path_distribution_fitting(origin, destination, start_node, end_node, link_length)
 ```
-which returns
+which is a shorthand for
 ```julia
-3-element Array{Float64,1}:
- 184.822  
- 324.145  
-   6.49087
+no_path_est, x_data, y_data =
+    monte_carlo_path_distribution(origin, destination, start_node, end_node, link_length)
+
+beta_est = path_distribution_fitting(x_data, y_data)
 ```
-In this case, the first element ```beta_est[1]``` is simply an estimate of the total number of paths between origin and destination.
