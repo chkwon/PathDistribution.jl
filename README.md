@@ -136,7 +136,7 @@ plot(
     Guide.title("Estimated Path Length Distribution"),
 )
 
-draw(SVG("fit_plot.svg", 10inch, 6inch), fit_plot)
+draw(PNG("fit_plot.png", 10inch, 6inch), fit_plot)
 ```
-<embed type="image/svg+xml" src="fit_plot.svg" />
-<!-- ![Example plot of fit_plot.svg](fit_plot.svg) -->
+The result is
+![Example plot of fit_plot.png](fit_plot.png)
