@@ -138,5 +138,5 @@ plot(
 
 draw(SVG("fit_plot.svg", 10inch, 6inch), fit_plot)
 ```
-
-![Example plot of fit_plot.svg](fit_plot.svg)
+<embed type="image/svg+xml" src="fit_plot.svg" />
+<!-- ![Example plot of fit_plot.svg](fit_plot.svg) -->
