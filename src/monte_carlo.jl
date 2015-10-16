@@ -160,7 +160,7 @@ function naive_path_generation(origin, destination, adj_mtx, N1)
 
         while current != destination
             #3
-            V = Int64[]
+            V = Int[]
             for i=1:size(adj,1) # number of nodes
                 if adj[current,i] == 1
                     push!(V, i)
@@ -274,7 +274,7 @@ function length_distribution_method(origin, destination, adj_mtx, link_length_di
 
             else
             #5
-                V = Int64[]
+                V = Int[]
                 for i=1:size(adj,1) # number of nodes
                     if adj[current,i] == 1
                         push!(V, i)

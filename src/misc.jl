@@ -47,7 +47,7 @@ function getAdjacency(start_node, end_node)
 
     no_node = getNoNode(start_node, end_node)
 
-    adj = zeros(Int64, no_node, no_node)
+    adj = zeros(Int, no_node, no_node)
 
     for k=1:length(start_node)
         i = start_node[k]
