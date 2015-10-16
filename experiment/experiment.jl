@@ -20,7 +20,7 @@ function do_exp(filename, origin, destination, start_node, end_node, link_length
     println("$filename, origin=$origin, destination=$destination")
     println("number of paths estimate: $number_paths")
 
-    beta_est = path_distribution_fitting(number_paths, x_data, y_data)
+    beta_est = path_distribution_fitting(x_data, y_data)
 
     println("beta_fit = $beta_fit")
     println("beta_est = $beta_est")
