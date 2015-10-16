@@ -10,7 +10,9 @@
 [![Coverage Status](https://coveralls.io/repos/chkwon/PathDistribution.jl/badge.svg?branch=master&service=github)](https://coveralls.io/github/chkwon/PathDistribution.jl?branch=master)
 
 
-This Julia package implements the Monte Carlo path generation method to estimat the number of simple paths between a pair of nodes in a graph, proposed by [Roberts and Kroese (2007)](http://dx.doi.org/10.7155/jgaa.00142): Estimating the Number of *s*-*t* Paths in a Graph. *Journal of Graph Algorithms and Applications*, 11(1), 195-214.
+This Julia package implements the Monte Carlo path generation method to estimat the number of simple paths between a pair of nodes in a graph, proposed by Roberts and Kroese (2007).
+
+* [Roberts, B., & Kroese, D. P. (2007). Estimating the Number of *s*-*t* Paths in a Graph. *Journal of Graph Algorithms and Applications*, 11(1), 195-214.](http://dx.doi.org/10.7155/jgaa.00142)
 
 In addition, using the same idea, this package tries to estimate the path length distribution as follows. Let *n(x)* denote the cumulative number of paths whose length is no greather than *x*. We assume that *n(x)* is of the form:
 
@@ -18,7 +20,7 @@ In addition, using the same idea, this package tries to estimate the path length
 n(x) = beta[1] * ( 1 - exp( - (x/beta[2])^beta[3] ) )
 ```
 
-This package estimates ```beta```.
+This package estimates ```beta``` using the [LsqFit.jl](https://github.com/JuliaOpt/LsqFit.jl) package.
 
 ## Installation
 
