@@ -89,7 +89,7 @@ function estimate_cumulative_count(samples::Array{PathSample,1}, NN)
     end
     no_path_est = no_path_est / NN
 
-    x_data = linspace(minimum(path_lengths), maximum(path_lengths), 100)
+    x_data = collect(linspace(minimum(path_lengths), maximum(path_lengths), 100))
     y_data = similar(x_data)
 
     for i=1:length(x_data)
