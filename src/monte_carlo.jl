@@ -10,7 +10,7 @@ end
 ################################################################################
 
 # The ultimate form of the function
-function monte_carlo_path_distribution(origin::Int, destination::Int, adj_mtx::Array{Int,2}, link_length_dict::Dict, N1=5000, N2=10000)
+function monte_carlo_path_distribution{T<:Integer}(origin::T, destination::T, adj_mtx::Array{T,2}, link_length_dict::Dict, N1=5000, N2=10000)
     samples = length_distribution_method(origin, destination, adj_mtx, link_length_dict, N1, N2)
     # number_paths, path_length_samples = sample_path_dist(samples, N2)
 
@@ -22,12 +22,12 @@ end
 # Useful for testing the instances in
 # Roberts, B., & Kroese, D. P. (2007). Estimating the Number of st Paths in a Graph. J. Graph Algorithms Appl., 11(1), 195-214.
 # http://dx.doi.org/10.7155/jgaa.00142
-function monte_carlo_path_distribution(origin::Int, destination::Int, adj_mtx::Array{Int,2}, N1=5000, N2=10000)
+function monte_carlo_path_distribution{T<:Integer}(origin::T, destination::T, adj_mtx::Array{T,2}, N1=5000, N2=10000)
     link_length_dict = getLinkLengthDict(adj_mtx)
 
     return monte_carlo_path_distribution(origin, destination, adj_mtx, link_length_dict, N1, N2)
 end
-function monte_carlo_path_number(origin::Int, destination::Int, adj_mtx::Array{Int,2}, N1=5000, N2=10000)
+function monte_carlo_path_number{T<:Integer}(origin::T, destination::T, adj_mtx::Array{T,2}, N1=5000, N2=10000)
     link_length_dict = getLinkLengthDict(adj_mtx)
     no_path_est, x_data, y_data = monte_carlo_path_distribution(origin, destination, adj_mtx, link_length_dict, N1, N2)
 
@@ -36,7 +36,7 @@ end
 
 
 # Useful for experimenting many realistic road networks
-function monte_carlo_path_distribution(origin::Int, destination::Int, start_node::Array{Int,1}, end_node::Array{Int,1}, link_length, N1=5000, N2=10000)
+function monte_carlo_path_distribution{T<:Integer}(origin::T, destination::T, start_node::Array{T,1}, end_node::Array{T,1}, link_length, N1=5000, N2=10000)
     link_length_dict = getLinkLengthDict(start_node, end_node, link_length)
     adj_mtx = getAdjacency(start_node, end_node)
 
