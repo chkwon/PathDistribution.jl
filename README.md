@@ -34,14 +34,14 @@ Pkg.clone("https://github.com/chkwon/PathDistribution.jl")
 There are two ways of using this package. When you are given an adjacency matrix of the form:
 
 ```julia
-adj_mtx =[  0 1 1 1 0 1 1 1;
-            1 0 0 0 1 1 1 0;
+adj_mtx = [ 0 1 1 1 0 1 1 1 ;
+            1 0 0 0 1 1 1 0 ;
             1 0 0 1 1 1 1 1 ;
             1 0 1 0 1 1 1 1 ;
             0 1 1 1 0 1 0 0 ;
             1 1 1 1 1 0 1 1 ;
             1 1 1 1 0 1 0 1 ;
-            1 0 1 1 0 1 1 0     ]
+            1 0 1 1 0 1 1 0 ]
 ```
 
 and want to estimate the number of paths between node 1 and node 8, then
