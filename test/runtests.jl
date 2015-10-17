@@ -65,8 +65,8 @@ data = [
 14  15  25.0 ;
 ]
 
-start_node = round(Int64, data[:,1]) #first column of data
-end_node = round(Int64, data[:,2]) #second column of data
+start_node = round(Int, data[:,1]) #first column of data
+end_node = round(Int, data[:,2]) #second column of data
 link_length = data[:,3] #third
 
 origin = 1
