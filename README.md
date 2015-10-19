@@ -10,7 +10,7 @@
 [![Coverage Status](https://coveralls.io/repos/chkwon/PathDistribution.jl/badge.svg?branch=master&service=github)](https://coveralls.io/github/chkwon/PathDistribution.jl?branch=master)
 
 
-This Julia package implements the Monte Carlo path generation method to estimat the number of simple paths between a pair of nodes in a graph, proposed by Roberts and Kroese (2007).
+This Julia package implements the Monte Carlo path generation method to estimate the number of simple paths between a pair of nodes in a graph, proposed by Roberts and Kroese (2007).
 
 * [Roberts, B., & Kroese, D. P. (2007). Estimating the Number of *s*-*t* Paths in a Graph. *Journal of Graph Algorithms and Applications*, 11(1), 195-214.](http://dx.doi.org/10.7155/jgaa.00142)
 
@@ -30,7 +30,7 @@ This package requires Julia version 0.4.
 Pkg.clone("https://github.com/chkwon/PathDistribution.jl")
 ```
 
-## Tutorial
+## Basic Usage
 There are two ways of using this package. When you are given an adjacency matrix of the form:
 
 ```julia
@@ -57,12 +57,15 @@ or
 using PathDistribution
 number_paths, x_data, y_data = monte_carlo_path_distribution(1, 8, adj_mtx)
 ```
-where `x_data` and `y_data` are for estimating the cumulative count of paths by path length. These data may be used to estimate `beta` in the function form `n(x)` as follows:
+where `x_data` and `y_data` are for estimating the cumulative count of paths by path length. That is,
+`y_data[i]` is an estimate for the number of simple paths whose length is no greater than `x_data[i]` between the origin and destination nodes. These data may be used to estimate `beta` in the function form `n(x)` as follows:
 
 ```julia
 beta_est = path_distribution_fitting(x_data, y_data)
 ```
 
+
+## Another Form
 
 When you have the following form data:
 ```julia
@@ -142,3 +145,7 @@ draw(PNG("fit_plot.png", 10inch, 6inch), fit_plot)
 ```
 The result is
 ![Example plot of fit_plot.png](fit_plot.png)
+
+Another example when it is applied to the Buffalo Network available at https://github.com/chkwon/HazmatNetworkData:
+![Example plot of buffalo.png](plot.png)
+The bars represent the cumulative path counts from the fully enumerated, actual path set. The red curve is the fitting result to the actual path set, and the blue curve is the fitting result to the estimated path counts by the Monte Carlo method.
