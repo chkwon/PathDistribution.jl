@@ -80,8 +80,8 @@ end
 function estimate_cumulative_count(samples::Array{PathSample,1}, NN)
     no_path_est = 0
 
-    path_lengths = []
-    likelihoods = []
+    path_lengths = Array{Float64,1}(0)
+    likelihoods = Array{Float64,1}(0)
     for s in samples
         no_path_est += 1 / s.g
         push!(path_lengths, s.length)
@@ -90,6 +90,7 @@ function estimate_cumulative_count(samples::Array{PathSample,1}, NN)
     no_path_est = no_path_est / NN
 
     x_data = collect(linspace(minimum(path_lengths), maximum(path_lengths), 100))
+    # x_data = unique(path_lengths)
     y_data = similar(x_data)
 
     for i=1:length(x_data)

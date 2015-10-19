@@ -26,7 +26,7 @@ adj_mtx =[  0 1 1 1 0 1 1 1;
             1 0 1 1 0 1 1 0     ]
 no_path_est, x_data, y_data = monte_carlo_path_distribution(1, size(adj_mtx,1), adj_mtx)
 println("Case 1: $no_path_est (true value = 397)")
-@assert abs(number_paths - 397)/397 < 0.05
+@assert abs(no_path_est - 397)/397 < 0.05
 
 
 
@@ -152,8 +152,14 @@ destination = 15
 N1 = 1000
 N2 = 2000
 
-beta_est = path_distribution_fitting(origin, destination, start_node, end_node, link_length)
-beta_est = path_distribution_fitting(origin, destination, start_node, end_node, link_length, N1, N2)
+# beta_est = path_distribution_fitting(origin, destination, start_node, end_node, link_length)
+# beta_est = path_distribution_fitting(origin, destination, start_node, end_node, link_length, N1, N2)
+
+
+no_path_est, x_data, y_data =
+    monte_carlo_path_distribution(origin, destination, start_node, end_node, link_length, 5000,30000)
+
+beta_est = path_distribution_fitting(x_data, y_data)
 
 
 
@@ -163,6 +169,22 @@ beta_est = path_distribution_fitting(origin, destination, start_node, end_node, 
 
 
 
+
+
+using Gadfly
+
+x_fit = x_data
+y_fit = cumulative_model(x_fit, beta_est)
+
+fit_plot =
+plot(
+    layer(x=x_fit, y=y_fit, Geom.line, Theme(default_color=colorant"red") ) ,
+    layer(x=x_data, y=y_data, Geom.point, Theme(default_color=colorant"blue") ) ,
+    Guide.xlabel("Path Length"), Guide.ylabel("Cumulative Count"),
+    Guide.title("Estimated Path Length Distribution"),
+)
+
+draw(PNG("fit_plot.png", 10inch, 6inch), fit_plot)
 
 
 
