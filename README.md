@@ -146,6 +146,10 @@ draw(PNG("fit_plot.png", 10inch, 6inch), fit_plot)
 The result is
 ![Example plot of fit_plot.png](fit_plot.png)
 
+
+
+## Test in a Network
+ 
 Another example when it is applied to the Buffalo Network available at https://github.com/chkwon/HazmatNetworkData:
 ![Example plot of buffalo.png](plot.png)
 The bars represent the cumulative path counts from the fully enumerated, actual path set. The red curve is the fitting result to the actual path set, and the blue curve is the fitting result to the estimated path counts by the Monte Carlo method.
