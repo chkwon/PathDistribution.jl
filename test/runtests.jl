@@ -30,26 +30,26 @@ println("The total number of paths = $(length(path_enums)).")
 println("The estimated number      = $(y_data_est[end])")
 
 
-using Gadfly
-
-x_fit = linspace(minimum(x_data),maximum(x_data),100)
-y_fit = cumulative_model(x_fit, beta)
-
-x_fit_est = linspace(minimum(x_data),maximum(x_data),100)
-y_fit_est = cumulative_model(x_fit_est, beta_est)
-
-fit_plot =
-plot(
-    # layer(x=x_fit, y=y_fit, Geom.line, Theme(default_color=colorant"red") ) ,
-    layer(x=x_data, y=y_data, Geom.step, Theme(default_color=colorant"red") ) ,
-    layer(x=x_fit_est, y=y_fit_est, Geom.line, Theme(default_color=colorant"blue") ) ,
-    # layer(x=x_data_est, y=y_data_est, Geom.point, Theme(default_color=colorant"blue") ) ,
-    Guide.xlabel("Path Length"), Guide.ylabel("Cumulative Count"),
-    Guide.title("Path Length Distribution"),
-    Guide.manual_color_key("Legend", ["Actual", "Estimated"], ["red", "blue"])
-)
-
-draw(PNG("case1.png", 6inch, 4inch), fit_plot)
+# using Gadfly
+#
+# x_fit = linspace(minimum(x_data),maximum(x_data),100)
+# y_fit = cumulative_model(x_fit, beta)
+#
+# x_fit_est = linspace(minimum(x_data),maximum(x_data),100)
+# y_fit_est = cumulative_model(x_fit_est, beta_est)
+#
+# fit_plot =
+# plot(
+#     # layer(x=x_fit, y=y_fit, Geom.line, Theme(default_color=colorant"red") ) ,
+#     layer(x=x_data, y=y_data, Geom.step, Theme(default_color=colorant"red") ) ,
+#     layer(x=x_fit_est, y=y_fit_est, Geom.line, Theme(default_color=colorant"blue") ) ,
+#     # layer(x=x_data_est, y=y_data_est, Geom.point, Theme(default_color=colorant"blue") ) ,
+#     Guide.xlabel("Path Length"), Guide.ylabel("Cumulative Count"),
+#     Guide.title("Path Length Distribution"),
+#     Guide.manual_color_key("Legend", ["Actual", "Estimated"], ["red", "blue"])
+# )
+#
+# draw(PNG("case1.png", 6inch, 4inch), fit_plot)
 
 
 
@@ -217,26 +217,26 @@ samples = monte_carlo_path_sampling(origin, destination, start_node, end_node, l
 x_data_est, y_data_est = estimate_cumulative_count(samples, :first_quarter)
 beta_est = path_distribution_fitting(x_data_est, y_data_est)
 
-using Gadfly
-
-x_fit = linspace(minimum(x_data),maximum(x_data),100)
-y_fit = cumulative_model(x_fit, beta)
-
-x_fit_est = linspace(minimum(x_data),maximum(x_data),100)
-y_fit_est = cumulative_model(x_fit_est, beta_est)
-
-fit_plot =
-plot(
-    # layer(x=x_fit, y=y_fit, Geom.line, Theme(default_color=colorant"red") ) ,
-    layer(x=x_data, y=y_data, Geom.step, Theme(default_color=colorant"red") ) ,
-    layer(x=x_fit_est, y=y_fit_est, Geom.line, Theme(default_color=colorant"blue") ) ,
-    # layer(x=x_data_est, y=y_data_est, Geom.point, Theme(default_color=colorant"blue") ) ,
-    Guide.xlabel("Path Length"), Guide.ylabel("Cumulative Count"),
-    Guide.title("Path Length Distribution"),
-    Guide.manual_color_key("Legend", ["Actual", "Estimated"], ["red", "blue"])
-)
-
-draw(PNG("Sioux-Falls-1-15.png", 6inch, 4inch), fit_plot)
+# using Gadfly
+#
+# x_fit = linspace(minimum(x_data),maximum(x_data),100)
+# y_fit = cumulative_model(x_fit, beta)
+#
+# x_fit_est = linspace(minimum(x_data),maximum(x_data),100)
+# y_fit_est = cumulative_model(x_fit_est, beta_est)
+#
+# fit_plot =
+# plot(
+#     # layer(x=x_fit, y=y_fit, Geom.line, Theme(default_color=colorant"red") ) ,
+#     layer(x=x_data, y=y_data, Geom.step, Theme(default_color=colorant"red") ) ,
+#     layer(x=x_fit_est, y=y_fit_est, Geom.line, Theme(default_color=colorant"blue") ) ,
+#     # layer(x=x_data_est, y=y_data_est, Geom.point, Theme(default_color=colorant"blue") ) ,
+#     Guide.xlabel("Path Length"), Guide.ylabel("Cumulative Count"),
+#     Guide.title("Path Length Distribution"),
+#     Guide.manual_color_key("Legend", ["Actual", "Estimated"], ["red", "blue"])
+# )
+#
+# draw(PNG("Sioux-Falls-1-15.png", 6inch, 4inch), fit_plot)
 
 
 
