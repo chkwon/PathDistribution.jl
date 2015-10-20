@@ -1,7 +1,8 @@
 type PathSample
     path::Array
-    g::Float64
-    length::Float64
+    g::Real # likelihood
+    length::Real # path length
+    N::Integer # number of samples
 end
 
 
@@ -10,138 +11,53 @@ end
 ################################################################################
 
 # The ultimate form of the function
-function monte_carlo_path_distribution{T<:Integer}(origin::T, destination::T, adj_mtx::Array{T,2}, link_length_dict::Dict, N1=5000, N2=10000)
+function monte_carlo_path_sampling{T<:Integer}(origin::T, destination::T, adj_mtx::Array{T,2}, link_length_dict::Dict, N1=5000, N2=10000)
     samples = length_distribution_method(origin, destination, adj_mtx, link_length_dict, N1, N2)
-    # number_paths, path_length_samples = sample_path_dist(samples, N2)
 
-    no_path_est, x_data, y_data = estimate_cumulative_count(samples, N2)
+    # no_path_est, x_data, y_data = estimate_cumulative_count(samples, N2)
+    # return no_path_est, x_data, y_data
 
-    return no_path_est, x_data, y_data
+    return samples
 end
+
+# - - - - - -
 
 # Useful for testing the instances in
 # Roberts, B., & Kroese, D. P. (2007). Estimating the Number of st Paths in a Graph. J. Graph Algorithms Appl., 11(1), 195-214.
 # http://dx.doi.org/10.7155/jgaa.00142
-function monte_carlo_path_distribution{T<:Integer}(origin::T, destination::T, adj_mtx::Array{T,2}, N1=5000, N2=10000)
+function monte_carlo_path_sampling{T<:Integer}(origin::T, destination::T, adj_mtx::Array{T,2}, N1=5000, N2=10000)
     link_length_dict = getLinkLengthDict(adj_mtx)
-
-    return monte_carlo_path_distribution(origin, destination, adj_mtx, link_length_dict, N1, N2)
+    return monte_carlo_path_sampling(origin, destination, adj_mtx, link_length_dict, N1, N2)
 end
 function monte_carlo_path_number{T<:Integer}(origin::T, destination::T, adj_mtx::Array{T,2}, N1=5000, N2=10000)
     link_length_dict = getLinkLengthDict(adj_mtx)
-    no_path_est, x_data, y_data = monte_carlo_path_distribution(origin, destination, adj_mtx, link_length_dict, N1, N2)
-
-    return no_path_est
+    samples = monte_carlo_path_sampling(origin, destination, adj_mtx, link_length_dict, N1, N2)
+    return estimate_number(samples)
 end
 
 
 # Useful for experimenting many realistic road networks
-function monte_carlo_path_distribution{T<:Integer}(origin::T, destination::T, start_node::Array{T,1}, end_node::Array{T,1}, link_length, N1=5000, N2=10000)
+function monte_carlo_path_sampling{T<:Integer}(origin::T, destination::T, start_node::Array{T,1}, end_node::Array{T,1}, link_length, N1=5000, N2=10000)
     link_length_dict = getLinkLengthDict(start_node, end_node, link_length)
     adj_mtx = getAdjacency(start_node, end_node)
 
-    return monte_carlo_path_distribution(origin, destination, adj_mtx, link_length_dict, N1, N2)
+    return monte_carlo_path_sampling(origin, destination, adj_mtx, link_length_dict, N1, N2)
 end
 
 ################################################################################
 ################################################################################
 
-
-
-
-
-
-#
-# function monte_carlo_path_distribution_split(origin::Int, destination::Int, adj_mtx::Array{Int,2}, N1=1000, N2=2000)
-#     final_nodes = []
-#     for i=1:size(adj_mtx,1)
-#         if adj_mtx[i,destination]==1
-#             push!(final_nodes, i)
-#         end
-#     end
-#
-#     adj = copy(adj_mtx)
-#     adj[:,destination] = 0
-#     adj[destination,:] = 0
-#
-#     total_num = 0
-#     for n in final_nodes
-#         samples = length_distribution_method(origin, n, adj, [], N1, N2)
-#         number_paths, path_length_samples = sample_path_dist(samples, N2)
-#
-#         total_num += number_paths
-#     end
-#
-#     return total_num
-# end
-
-
-
-function estimate_cumulative_count(samples::Array{PathSample,1}, NN)
+function estimate_number(samples::Array{PathSample,1})
     no_path_est = 0
-
-    path_lengths = Array{Float64,1}(0)
-    likelihoods = Array{Float64,1}(0)
     for s in samples
         no_path_est += 1 / s.g
-        push!(path_lengths, s.length)
-        push!(likelihoods, s.g)
     end
-    no_path_est = no_path_est / NN
-
-    x_data = collect(linspace(minimum(path_lengths), maximum(path_lengths), 100))
-    # x_data = unique(path_lengths)
-    y_data = similar(x_data)
-
-    for i=1:length(x_data)
-        idx = find(x-> x<=x_data[i], path_lengths)
-        y_data[i] = sum(1./likelihoods[idx])
-    end
-    y_data =  y_data / NN
-
-    return no_path_est, x_data, y_data
+    no_path_est = no_path_est / samples[1].N
+    return no_path_est
 end
 
-
-# function estimate_sample_path_dist(samples, N)
-#     estimate = 0
-#     path_lengths = Float64[]
-#     for s in samples
-#         estimate += 1 / s.g
-#         push!(path_lengths, s.length)
-#     end
-#     estimate = estimate / N
-#
-#     return estimate, path_lengths
-# end
-#
-# function estimate_path_number(samples, N)
-#     estimate = 0
-#     for s in samples
-#         estimate += 1 / s.g
-#     end
-#     estimate = estimate / N
-#
-#     return estimate
-# end
-
-#
-# function sample_path_dist(samples, N)
-#     estimate = 0
-#     path_lengths = Float64[]
-#     for s in samples
-#         estimate += 1 / s.g
-#         push!(path_lengths, s.length)
-#     end
-#     estimate = estimate / N
-#
-#     return estimate, path_lengths
-# end
-
-
-
-
-
+################################################################################
+################################################################################
 
 
 # Algorithm 1 (Naive Path Generation) of Roberts and Kroese (2007)
@@ -182,7 +98,7 @@ function naive_path_generation(origin, destination, adj_mtx, N1)
         end
 
         if x[end] == destination
-            this_sample = PathSample(x, g, 0.0)
+            this_sample = PathSample(x, g, 0.0, N1)
             push!(naive_samples, this_sample)
         end
     end
@@ -300,7 +216,7 @@ function length_distribution_method(origin, destination, adj_mtx, link_length_di
         end
 
         if x[end] == destination
-            this_sample = PathSample(x, g, getPathLength(x, link_length_dict))
+            this_sample = PathSample(x, g, getPathLength(x, link_length_dict), N2)
             push!(better_samples, this_sample)
         end
     end

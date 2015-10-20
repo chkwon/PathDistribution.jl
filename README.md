@@ -30,8 +30,13 @@ This package requires Julia version 0.4.
 Pkg.clone("https://github.com/chkwon/PathDistribution.jl")
 ```
 
-## Basic Usage
-There are two ways of using this package. When you are given an adjacency matrix of the form:
+## Basic Usage with an Adjacency Matrix
+First import the package:
+```julia
+using PathDistribution
+```
+
+When you are given an adjacency matrix of the form:
 
 ```julia
 adj_mtx = [ 0 1 1 1 0 1 1 1 ;
@@ -47,22 +52,40 @@ adj_mtx = [ 0 1 1 1 0 1 1 1 ;
 and want to estimate the number of paths between node 1 and node 8, then
 
 ```julia
-using PathDistribution
 number_paths = monte_carlo_path_number(1, 8, adj_mtx)
 ```
 
 or
 
 ```julia
-using PathDistribution
-number_paths, x_data, y_data = monte_carlo_path_distribution(1, 8, adj_mtx)
+samples = monte_carlo_path_sampling(1, 8, adj_mtx)
+x_data_est, y_data_est = estimate_cumulative_count(samples)
 ```
-where `x_data` and `y_data` are for estimating the cumulative count of paths by path length. That is,
-`y_data[i]` is an estimate for the number of simple paths whose length is no greater than `x_data[i]` between the origin and destination nodes. These data may be used to estimate `beta` in the function form `n(x)` as follows:
+where `x_data_est` and `y_data_est` are for estimating the cumulative count of paths by path length. That is,
+`y_data_est[i]` is an estimate for the number of simple paths whose length is no greater than `x_data_est[i]` between the origin and destination nodes. `y_data_est[end]` is the estimated number of total paths.
+
+These data may be used to estimate `beta` in the function form `n(x)` as follows:
 
 ```julia
-beta_est = path_distribution_fitting(x_data, y_data)
+beta_est = path_distribution_fitting(x_data_est, y_data_est)
 ```
+
+This package can also enumerate all paths explicitly. (**CAUTION:** It may take forever to enumerate all paths for a large network.)
+```julia
+path_enums = path_enumeration(1, size(adj_mtx,1), adj_mtx)
+x_data, y_data = actual_cumulative_count(path_enums)
+beta = path_distribution_fitting(x_data, y_data)
+```
+You can access each enumerated path as follows:
+```julia
+for enum in path_enums
+    println("Length = $(enum.length) : $(enum.path)")
+end
+println("The total number of paths is $(length(path_enums))")
+```
+
+
+![Example plot](case1.png)
 
 
 ## Another Form
@@ -105,51 +128,30 @@ data = [
 14  15  25.0 ;
 ]
 
-start_node = round(Int64, data[:,1]) #first column of data
-end_node = round(Int64, data[:,2]) #second column of data
-link_length = data[:,3] #third
+st = round(Int, data[:,1]) #first column of data
+en = round(Int, data[:,2]) #second column of data
+len = data[:,3] #third
+
+# Double them for two-ways.
+start_node = [st; en]
+end_node = [en; st]
+link_length = [len; len]
 
 origin = 1
 destination = 15
 ```
 
-then use the following function:
+The similar tasks as above can be done as follows:
 ```julia
-using PathDistribution
-beta_est = path_distribution_fitting(origin, destination, start_node, end_node, link_length)
+# Full Path Enumeration
+path_enums = path_enumeration(origin, destination, start_node, end_node, link_length)
+x_data, y_data = actual_cumulative_count(path_enums)
+beta = path_distribution_fitting(x_data, y_data)
+
+# Monte Carlo Path Sampling
+samples = monte_carlo_path_sampling(origin, destination, start_node, end_node, link_length)
+x_data_est, y_data_est = estimate_cumulative_count(samples)
+beta_est = path_distribution_fitting(x_data_est, y_data_est)
 ```
-which is a shorthand for
-```julia
-no_path_est, x_data, y_data =
-    monte_carlo_path_distribution(origin, destination, start_node, end_node, link_length)
 
-beta_est = path_distribution_fitting(x_data, y_data)
-```
-
-Using [Gadfly.jl](http://gadflyjl.org) for example, one can create a plot as follows:
-```julia
-using Gadfly
-
-x_fit = x_data
-y_fit = cumulative_model(x_fit, beta_est)
-
-fit_plot =
-plot(
-    layer(x=x_fit, y=y_fit, Geom.line, Theme(default_color=colorant"red") ) ,
-    layer(x=x_data, y=y_data, Geom.point, Theme(default_color=colorant"blue") ) ,
-    Guide.xlabel("Path Length"), Guide.ylabel("Cumulative Count"),
-    Guide.title("Estimated Path Length Distribution"),
-)
-
-draw(PNG("fit_plot.png", 10inch, 6inch), fit_plot)
-```
-The result is
-![Example plot of fit_plot.png](fit_plot.png)
-
-
-
-## Test in a Network
-
-Another example when it is applied to the [Buffalo Network](https://github.com/chkwon/HazmatNetworkData/blob/master/data/Buffalo-Data.csv) available at https://github.com/chkwon/HazmatNetworkData:
-![Example plot of buffalo.png](plot.png)
-The bars represent the cumulative path counts from the fully enumerated, actual path set. The red curve is the fitting result to the actual path set, and the blue curve is the fitting result to the estimated path counts by the Monte Carlo method.
+![Example plot](Sioux-Falls-1-15.png)

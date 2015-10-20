@@ -45,7 +45,7 @@ end
 
 function getAdjacency(start_node, end_node)
 
-    no_node = getNoNode(start_node, end_node)
+    no_node = max( maximum(start_node), maximum(end_node) )
 
     adj = zeros(Int, no_node, no_node)
 
@@ -53,33 +53,11 @@ function getAdjacency(start_node, end_node)
         i = start_node[k]
         j = end_node[k]
         adj[i,j] = 1
+
+        # if option==:undirected
+        #     adj[j,i] = 1
+        # end
     end
-
-    #
-    #
-    # adj = [0 1 1 1 0 1 1 1;
-    #        1 0 0 0 1 1 1 0;
-    #        1 0 0 1 1 1 1 1 ;
-    #        1 0 1 0 1 1 1 1 ;
-    #        0 1 1 1 0 1 0 0 ;
-    #        1 1 1 1 1 0 1 1 ;
-    #        1 1 1 1 0 1 0 1 ;
-    #        1 0 1 1 0 1 1 0 ]
-
-    # adj = [ 0 1 1 1 1 1 1 0 1 1 1 1;
-    #         1 0 1 1 1 1 1 1 1 1 1 1;
-    #         1 1 0 1 1 1 1 1 1 0 1 1;
-    #         1 1 1 0 1 1 1 1 1 1 0 1;
-    #         1 1 1 0 0 1 1 1 0 1 1 1;
-    #         1 1 1 1 1 0 1 1 1 1 1 0;
-    #         1 1 1 1 1 1 0 1 1 1 1 1;
-    #         1 1 1 1 1 1 1 0 1 1 1 1;
-    #         1 1 1 1 1 1 1 1 0 1 1 1;
-    #         1 1 1 1 1 1 1 1 1 0 1 0;
-    #         1 1 1 1 1 1 1 1 1 1 0 1;
-    #         1 1 1 1 1 1 1 1 1 1 1 0         ]
-    #
-
 
     return adj
 end

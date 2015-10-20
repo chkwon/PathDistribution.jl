@@ -6,14 +6,19 @@ using LsqFit
 
 include("misc.jl")
 include("monte_carlo.jl")
-include("path_distribution_estimate.jl")
+include("fitting.jl")
+include("path_enumeration.jl")
 
 export
 	PathSample,
-	monte_carlo_path_distribution,
+	monte_carlo_path_sampling,
 	monte_carlo_path_number,
 	path_distribution_fitting,
-	cumulative_model
+	cumulative_model,
+	estimate_cumulative_count,
+	PathEnum,
+	path_enumeration,
+	actual_cumulative_count
 
 
 
