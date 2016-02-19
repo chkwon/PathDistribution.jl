@@ -14,13 +14,11 @@ This Julia package implements the Monte Carlo path generation method to estimate
 
 * [Roberts, B., & Kroese, D. P. (2007). Estimating the Number of *s*-*t* Paths in a Graph. *Journal of Graph Algorithms and Applications*, 11(1), 195-214.](http://dx.doi.org/10.7155/jgaa.00142)
 
-In addition, using the same idea, this package tries to estimate the path length distribution as follows. Let *n(x)* denote the cumulative number of paths whose length is no greather than *x*. We assume that *n(x)* is of the form:
+Extending the same idea, this package also estimate the path-length distribution. That is, we can estimate the number of paths whose lengths is no greater than a certain number. This idea was used in the following paper:
 
-```julia
-n(x) = beta[1] * ( 1 - exp( - (x/beta[2])^beta[3] ) )
-```
+* [Sun, L., Karwan, M, & Kwon, C. Generalized Bounded Rationality and Robust Multi-Commodity Network Design.](http://www.chkwon.net/papers/sun_gbr.pdf)
 
-This package estimates ```beta``` using the [LsqFit.jl](https://github.com/JuliaOpt/LsqFit.jl) package.
+This package can also be used to fully enumerate all paths. 
 
 ## Installation
 
@@ -52,29 +50,25 @@ adj_mtx = [ 0 1 1 1 0 1 1 1 ;
 and want to estimate the number of paths between node 1 and node 8, then
 
 ```julia
-number_paths = monte_carlo_path_number(1, 8, adj_mtx)
+# N1: number of samples in the first stage (default=5000)
+# N2: number of samples in the second stage (default=10000)
+no_path_est = monte_carlo_path_number(1, 8, adj_mtx)
+no_path_est = monte_carlo_path_number(1, 8, adj_mtx, N1, N2)
 ```
 
 or
 
 ```julia
-samples = monte_carlo_path_sampling(1, 8, adj_mtx)
+samples = monte_carlo_path_sampling(1, size(adj_mtx,1), adj_mtx)
 x_data_est, y_data_est = estimate_cumulative_count(samples)
 ```
 where `x_data_est` and `y_data_est` are for estimating the cumulative count of paths by path length. That is,
-`y_data_est[i]` is an estimate for the number of simple paths whose length is no greater than `x_data_est[i]` between the origin and destination nodes. `y_data_est[end]` is the estimated number of total paths.
+`y_data_est[i]` is an estimate for the number of simple paths whose length is no greater than `x_data_est[i]` between the origin and destination nodes. Note that `y_data_est[end]` is the estimated number of total paths.
 
-These data may be used to estimate `beta` in the function form `n(x)` as follows:
-
-```julia
-beta_est = path_distribution_fitting(x_data_est, y_data_est)
-```
-
-This package can also enumerate all paths explicitly. (**CAUTION:** It may take forever to enumerate all paths for a large network.)
+This package can also enumerate all paths explicitly. (**CAUTION:** It may take "forever" to enumerate all paths for a large network.)
 ```julia
 path_enums = path_enumeration(1, size(adj_mtx,1), adj_mtx)
 x_data, y_data = actual_cumulative_count(path_enums)
-beta = path_distribution_fitting(x_data, y_data)
 ```
 You can access each enumerated path as follows:
 ```julia
@@ -85,7 +79,6 @@ println("The total number of paths is $(length(path_enums))")
 ```
 
 
-![Example plot](case1.png)
 
 
 ## Another Form
@@ -143,15 +136,19 @@ destination = 15
 
 The similar tasks as above can be done as follows:
 ```julia
-# Full Path Enumeration
+# Full Enumeration
 path_enums = path_enumeration(origin, destination, start_node, end_node, link_length)
 x_data, y_data = actual_cumulative_count(path_enums)
-beta = path_distribution_fitting(x_data, y_data)
 
-# Monte Carlo Path Sampling
+# Monte-Carlo estimation
+N1 = 5000
+N2 = 10000
 samples = monte_carlo_path_sampling(origin, destination, start_node, end_node, link_length)
+samples = monte_carlo_path_sampling(origin, destination, start_node, end_node, link_length, N1, N2)
 x_data_est, y_data_est = estimate_cumulative_count(samples)
-beta_est = path_distribution_fitting(x_data_est, y_data_est)
-```
 
-![Example plot](Sioux-Falls-1-15.png)
+println("===== Another Example =====")
+println("The total number of paths:")
+println("- Full enumeration      : $(length(path_enums))")
+println("- Monte Carlo estimation: $(y_data_est[end])")
+```

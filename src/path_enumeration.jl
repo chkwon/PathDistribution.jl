@@ -1,3 +1,5 @@
+# This script includes functions that are used to enumerate paths explictly, not using sampling.
+
 type PathEnum
     path::Array
     length::Real
