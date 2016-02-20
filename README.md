@@ -14,7 +14,7 @@ This Julia package implements the Monte Carlo path generation method to estimate
 
 * [Roberts, B., & Kroese, D. P. (2007). Estimating the Number of *s*-*t* Paths in a Graph. *Journal of Graph Algorithms and Applications*, 11(1), 195-214.](http://dx.doi.org/10.7155/jgaa.00142)
 
-Extending the same idea, this package also estimate the path-length distribution. That is, we can estimate the number of paths whose lengths is no greater than a certain number. This idea was used in the following paper:
+Extending the same idea, this package also estimate the path-length distribution. That is, we can estimate the number of paths whose length is no greater than a certain number. This idea was used in the following paper:
 
 * [Sun, L., Karwan, M, & Kwon, C. Generalized Bounded Rationality and Robust Multi-Commodity Network Design.](http://www.chkwon.net/papers/sun_gbr.pdf)
 
