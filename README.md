@@ -18,9 +18,9 @@ Extending the same idea, this package also estimate the path-length distribution
 
 * [Sun, L., Karwan, M, & Kwon, C. Generalized Bounded Rationality and Robust Multi-Commodity Network Design.](http://www.chkwon.net/papers/sun_gbr.pdf)
 
-This package can also be used to fully enumerate all paths. 
+This package can also be used to fully enumerate all paths.
 
-## Installation
+# Installation
 
 This package requires Julia version 0.4.
 
@@ -28,13 +28,14 @@ This package requires Julia version 0.4.
 Pkg.clone("https://github.com/chkwon/PathDistribution.jl")
 ```
 
-## Basic Usage with an Adjacency Matrix
+
+# Basic Usage with an Adjacency Matrix
 First import the package:
 ```julia
 using PathDistribution
 ```
 
-When you are given an adjacency matrix of the form:
+Suppose we have an adjacency matrix of the form:
 
 ```julia
 adj_mtx = [ 0 1 1 1 0 1 1 1 ;
@@ -46,9 +47,11 @@ adj_mtx = [ 0 1 1 1 0 1 1 1 ;
             1 1 1 1 0 1 0 1 ;
             1 0 1 1 0 1 1 0 ]
 ```
+and the origin node is 1 the destination node is 8.
 
-and want to estimate the number of paths between node 1 and node 8, then
+## Monte-Carlo Simulation
 
+To estimate the total number of paths from the origin to the destination, we can do the following:
 ```julia
 # N1: number of samples in the first stage (default=5000)
 # N2: number of samples in the second stage (default=10000)
@@ -56,14 +59,15 @@ no_path_est = monte_carlo_path_number(1, 8, adj_mtx)
 no_path_est = monte_carlo_path_number(1, 8, adj_mtx, N1, N2)
 ```
 
-or
-
+To estimate the path-length distribution:
 ```julia
 samples = monte_carlo_path_sampling(1, size(adj_mtx,1), adj_mtx)
 x_data_est, y_data_est = estimate_cumulative_count(samples)
 ```
 where `x_data_est` and `y_data_est` are for estimating the cumulative count of paths by path length. That is,
 `y_data_est[i]` is an estimate for the number of simple paths whose length is no greater than `x_data_est[i]` between the origin and destination nodes. Note that `y_data_est[end]` is the estimated number of total paths.
+
+## Full Enumeration
 
 This package can also enumerate all paths explicitly. (**CAUTION:** It may take "forever" to enumerate all paths for a large network.)
 ```julia
@@ -79,9 +83,18 @@ println("The total number of paths is $(length(path_enums))")
 ```
 
 
+## Results
+
+One obtains results similar to the following:
+```
+The total number of paths:
+- Full enumeration      : 397
+- Monte Carlo estimation: 395.6732706634341
+```
 
 
-## Another Form
+
+# Another Form
 
 When you have the following form data:
 ```julia
@@ -134,6 +147,8 @@ origin = 1
 destination = 15
 ```
 
+## Monte-Carlo Simulation
+
 The similar tasks as above can be done as follows:
 ```julia
 # Full Enumeration
@@ -151,4 +166,14 @@ println("===== Another Example =====")
 println("The total number of paths:")
 println("- Full enumeration      : $(length(path_enums))")
 println("- Monte Carlo estimation: $(y_data_est[end])")
+```
+
+## Results
+
+Results would look like:
+```
+===== Another Example =====
+The total number of paths:
+- Full enumeration      : 9851
+- Monte Carlo estimation: 9742.908561771697
 ```
