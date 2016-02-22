@@ -1,9 +1,9 @@
 # PathDistribution.jl
 
-<!--
-[![RobustShortestPath](http://pkg.julialang.org/badges/RobustShortestPath_0.3.svg)](http://pkg.julialang.org/?pkg=RobustShortestPath&ver=0.3)
-[![RobustShortestPath](http://pkg.julialang.org/badges/RobustShortestPath_0.4.svg)](http://pkg.julialang.org/?pkg=RobustShortestPath&ver=0.4)
--->
+[![PathDistribution](http://pkg.julialang.org/badges/PathDistribution_0.3.svg)](http://pkg.julialang.org/?pkg=PathDistribution)
+[![PathDistribution](http://pkg.julialang.org/badges/PathDistribution_0.4.svg)](http://pkg.julialang.org/?pkg=PathDistribution)
+[![PathDistribution](http://pkg.julialang.org/badges/PathDistribution_0.5.svg)](http://pkg.julialang.org/?pkg=PathDistribution)
+
 
 [![Build Status](https://travis-ci.org/chkwon/PathDistribution.jl.svg?branch=master)](https://travis-ci.org/chkwon/PathDistribution.jl)
 [![Build status](https://ci.appveyor.com/api/projects/status/ft7mcyofj0g9mxr5?svg=true)](https://ci.appveyor.com/project/chkwon/pathdistribution-jl)
@@ -25,7 +25,7 @@ This package can also be used to fully enumerate all paths.
 This package requires Julia version 0.4.
 
 ```julia
-Pkg.clone("https://github.com/chkwon/PathDistribution.jl")
+Pkg.add("PathDistribution")
 ```
 
 
