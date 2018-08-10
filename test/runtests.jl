@@ -100,8 +100,8 @@ data = [
 14  15  25.0 ;
 ]
 
-st = round(Int, data[:,1]) #first column of data
-en = round(Int, data[:,2]) #second column of data
+st = round.(Int, data[:,1]) #first column of data
+en = round.(Int, data[:,2]) #second column of data
 len = data[:,3] #third
 
 # Double them for two-ways.

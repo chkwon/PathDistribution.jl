@@ -1,4 +1,4 @@
-type PathSample
+mutable struct PathSample
     path::Array
     g::Real # likelihood
     length::Real # path length
@@ -11,7 +11,7 @@ end
 ################################################################################
 
 # The ultimate form of the function
-function monte_carlo_path_sampling{T<:Integer}(origin::T, destination::T, adj_mtx::Array{T,2}, link_length_dict::Dict, N1=5000, N2=10000)
+function monte_carlo_path_sampling(origin::T, destination::T, adj_mtx::Array{T,2}, link_length_dict::Dict, N1=5000, N2=10000) where {T<:Integer}
     samples = length_distribution_method(origin, destination, adj_mtx, link_length_dict, N1, N2)
 
     # no_path_est, x_data, y_data = estimate_cumulative_count(samples, N2)
@@ -27,13 +27,13 @@ end
 # http://dx.doi.org/10.7155/jgaa.00142
 
 # This function returns samples of paths.
-function monte_carlo_path_sampling{T<:Integer}(origin::T, destination::T, adj_mtx::Array{T,2}, N1=5000, N2=10000)
+function monte_carlo_path_sampling(origin::T, destination::T, adj_mtx::Array{T,2}, N1=5000, N2=10000) where {T<:Integer}
     link_length_dict = getLinkLengthDict(adj_mtx)
     return monte_carlo_path_sampling(origin, destination, adj_mtx, link_length_dict, N1, N2)
 end
 
 # This function returns the estimated number of paths, based on sampled paths.
-function monte_carlo_path_number{T<:Integer}(origin::T, destination::T, adj_mtx::Array{T,2}, N1=5000, N2=10000)
+function monte_carlo_path_number(origin::T, destination::T, adj_mtx::Array{T,2}, N1=5000, N2=10000) where {T<:Integer}
     link_length_dict = getLinkLengthDict(adj_mtx)
     samples = monte_carlo_path_sampling(origin, destination, adj_mtx, link_length_dict, N1, N2)
     return estimate_number(samples)
@@ -43,7 +43,7 @@ end
 
 
 # Useful for experimenting many realistic road networks
-function monte_carlo_path_sampling{T<:Integer}(origin::T, destination::T, start_node::Array{T,1}, end_node::Array{T,1}, link_length, N1=5000, N2=10000)
+function monte_carlo_path_sampling(origin::T, destination::T, start_node::Array{T,1},  end_node::Array{T,1}, link_length, N1=5000, N2=10000) where {T<:Integer}
     link_length_dict = getLinkLengthDict(start_node, end_node, link_length)
     adj_mtx = getAdjacency(start_node, end_node)
 
@@ -64,8 +64,8 @@ end
 
 function estimate_cumulative_count(samples::Array{PathSample,1}, option=:uniform)
     no_path_est = 0
-    path_lengths = Array{Float64,1}(0)
-    likelihoods = Array{Float64,1}(0)
+    path_lengths = Array{Float64,1}(undef, 0)
+    likelihoods = Array{Float64,1}(undef, 0)
     for s in samples
         no_path_est += 1 / s.g
         push!(path_lengths, s.length)
@@ -76,19 +76,19 @@ function estimate_cumulative_count(samples::Array{PathSample,1}, option=:uniform
 
     N_data = 100
     # option == :uniform
-    x_data = collect(linspace(minimum(path_lengths), maximum(path_lengths), N_data))
+    x_data = collect(range(minimum(path_lengths), stop=maximum(path_lengths), length=N_data))
     if option == :unique
         x_data = sort(unique(path_lengths))
     elseif option == :first_quarter
-        x_q1 = linspace(minimum(path_lengths), 0.25*maximum(path_lengths), N_data/2)
-        x_q234 = linspace(0.25*maximum(path_lengths), maximum(path_lengths), N_data/2)
+        x_q1 = range(minimum(path_lengths), stop=0.25*maximum(path_lengths), length=N_data/2)
+        x_q234 = range(0.25*maximum(path_lengths), stop=maximum(path_lengths), length=N_data/2)
         x_data = append!(collect(x_q1), collect(x_q234))
     end
 
     y_data = similar(x_data)
 
     for i=1:length(x_data)
-        idx = find(x-> x<=x_data[i], path_lengths)
+        idx = findall(x-> x<=x_data[i], path_lengths)
         y_data[i] = sum(1 ./ likelihoods[idx])
     end
     y_data =  y_data / samples[1].N
@@ -114,7 +114,7 @@ function naive_path_generation(origin, destination, adj_mtx, N1)
         current = origin
 
         #2
-        adj[:,origin] = 0
+        adj[:,origin] .= 0
 
         while current != destination
             #3
@@ -134,7 +134,7 @@ function naive_path_generation(origin, destination, adj_mtx, N1)
 
             #5
             current = next
-            adj[:,next] = 0
+            adj[:,next] .= 0
             g = g / length(V)
         end
 
@@ -155,7 +155,7 @@ function length_distribution_vector(naive_samples::Array{PathSample}, adj::Array
     # adj = getAdjacency(start_node, end_node)
     # no_node = getNoNode(start_node, end_node)
 
-    l_hat = Array{Float64}(no_node-1)
+    l_hat = Array{Float64}(undef, no_node-1)
     for k = 1:length(l_hat)
         numerator = 0.0
         denominator = 0.0
@@ -199,7 +199,7 @@ function length_distribution_method(origin, destination, adj_mtx, link_length_di
         current = origin
 
         #3
-        adj[:,origin] = 0
+        adj[:,origin] .= 0
 
         next = []
         while current != destination
@@ -209,7 +209,7 @@ function length_distribution_method(origin, destination, adj_mtx, link_length_di
             if adj[current, destination] == 1
             #4. A(c,n)=1
 
-                if sum(adj, 2)[current] == 1
+                if sum(adj, dims=2)[current] == 1
                 #4. destination is the only available vertex adjacent to current
                     next = destination
                 else
@@ -248,7 +248,7 @@ function length_distribution_method(origin, destination, adj_mtx, link_length_di
 
                 #7
                 current = next
-                adj[:,next] = 0
+                adj[:,next] .= 0
                 g = g / length(V)
 
             end

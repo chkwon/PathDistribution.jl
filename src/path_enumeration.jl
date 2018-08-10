@@ -1,6 +1,6 @@
 # This script includes functions that are used to enumerate paths explictly, not using sampling.
 
-type PathEnum
+mutable struct PathEnum
     path::Array
     length::Real
 end
@@ -9,7 +9,7 @@ end
 
 function path_enumeration(origin, destination, adj_mtx)
     link_length_dict = getLinkLengthDict(adj_mtx)
-    path_enums = Array{PathEnum,1}(0)
+    path_enums = Array{PathEnum,1}(undef, 0)
     return path_enumeration(origin, destination, adj_mtx, link_length_dict)
 end
 
@@ -24,7 +24,7 @@ end
 
 
 function path_enumeration(origin, destination, adj_mtx, link_length_dict::Dict)
-    path_enums = Array{PathEnum,1}(0)
+    path_enums = Array{PathEnum,1}(undef, 0)
     current_list = [origin]
     find_neighbor!(origin, destination, adj_mtx, current_list, path_enums, link_length_dict)
     return path_enums
@@ -36,7 +36,7 @@ end
 function find_neighbor!(current, destination, adj_mtx, current_list, path_enums, link_length_dict)
 
     for i=1:size(adj_mtx, 1)
-        visited = length(find(x-> x==i, current_list)) > 0
+        visited = length(findall(x-> x==i, current_list)) > 0
 
         if ! visited && adj_mtx[current, i] == 1
             # Create a new object for the new list
@@ -58,19 +58,19 @@ end
 
 
 function actual_cumulative_count(path_enums::Array{PathEnum,1}, option=:unique)
-    path_lengths = Array{Float64,1}(0)
+    path_lengths = Array{Float64,1}(undef, 0)
     for enum in path_enums
         push!(path_lengths, enum.length)
     end
 
     N_data = 100
     # option == :uniform
-    x_data = collect(linspace(minimum(path_lengths), maximum(path_lengths), N_data))
+    x_data = collect(range(minimum(path_lengths), stop=maximum(path_lengths), length=N_data))
     if option == :unique
         x_data = sort(unique(path_lengths))
     elseif option == :first_quarter
-        x_q1 = linspace(minimum(path_lengths), 0.25*maximum(path_lengths), N_data/2)
-        x_q234 = linspace(0.25*maximum(path_lengths), maximum(path_lengths), N_data/2)
+        x_q1 = range(minimum(path_lengths), stop=0.25*maximum(path_lengths), length=N_data/2)
+        x_q234 = range(0.25*maximum(path_lengths), stop=maximum(path_lengths), length=N_data/2)
         x_data = append!(collect(x_q1), collect(x_q234))
     end
 
