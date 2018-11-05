@@ -1,8 +1,8 @@
 # PathDistribution.jl
 
-[![PathDistribution](http://pkg.julialang.org/badges/PathDistribution_0.5.svg)](http://pkg.julialang.org/?pkg=PathDistribution)
-[![PathDistribution](http://pkg.julialang.org/badges/PathDistribution_0.6.svg)](http://pkg.julialang.org/?pkg=PathDistribution)
-[![PathDistribution](http://pkg.julialang.org/badges/PathDistribution_0.7.svg)](http://pkg.julialang.org/?pkg=PathDistribution)
+# [![PathDistribution](http://pkg.julialang.org/badges/PathDistribution_0.5.svg)](http://pkg.julialang.org/?pkg=PathDistribution)
+# [![PathDistribution](http://pkg.julialang.org/badges/PathDistribution_0.6.svg)](http://pkg.julialang.org/?pkg=PathDistribution)
+# [![PathDistribution](http://pkg.julialang.org/badges/PathDistribution_0.7.svg)](http://pkg.julialang.org/?pkg=PathDistribution)
 
 
 [![Build Status](https://travis-ci.org/chkwon/PathDistribution.jl.svg?branch=master)](https://travis-ci.org/chkwon/PathDistribution.jl)
