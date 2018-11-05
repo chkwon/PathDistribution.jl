@@ -22,8 +22,6 @@ This package can also be used to fully enumerate all paths.
 
 # Installation
 
-This package requires Julia version 0.4.
-
 ```julia
 Pkg.add("PathDistribution")
 ```
