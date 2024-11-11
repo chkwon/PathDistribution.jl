@@ -10,7 +10,7 @@ This Julia package implements the Monte Carlo path generation method to estimate
 
 Extending the same idea, this package also estimate the path-length distribution. That is, we can estimate the number of paths whose length is no greater than a certain number. This idea was used in the following paper:
 
-* [Sun, L., Karwan, M, & Kwon, C. Generalized Bounded Rationality and Robust Multi-Commodity Network Design.](http://www.chkwon.net/papers/sun_gbr.pdf)
+* [Sun, L., Karwan, M.H. and Kwon, C., 2018. Generalized bounded rationality and robust multicommodity network design. Operations Research, 66(1), pp.42-57.](http://www.chkwon.net/papers/sun_gbr.pdf)
 
 This package can also be used to fully enumerate all paths.
 
